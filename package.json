@@ -1,0 +1,32 @@
+{
+  "name": "audiowa-engine",
+  "version": "1.0.0",
+  "description": "Backend para procesamiento y transcripción de audios de WhatsApp",
+  "main": "src/server.js",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
+    "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.20.0",
+    "bullmq": "^5.17.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "ioredis": "^5.4.1",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.58.1",
+    "pino": "^9.4.0",
+    "pino-http": "^10.3.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.20.0"
+  }
+}
