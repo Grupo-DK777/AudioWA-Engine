@@ -2,17 +2,34 @@ version: '3.9'
 
 services:
   app:
-    build: .
+    build: ./backend
     container_name: audiowa-engine-app
     ports:
       - '3000:3000'
     env_file:
-      - .env
+      - ./backend/.env
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/audiowa_engine?schema=public
+      - REDIS_URL=redis://redis:6379
     depends_on:
       - postgres
       - redis
     volumes:
-      - ./uploads:/app/uploads
+      - ./backend/uploads:/app/uploads
+      - ./backend/src:/app/src
+
+  frontend:
+    build: ./frontend
+    container_name: audiowa-engine-frontend
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:3000/api
+    depends_on:
+      - app
 
   postgres:
     image: postgres:16-alpine
@@ -25,6 +42,17 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: audiowa-engine-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - '5050:80'
+    depends_on:
+      - postgres
 
   redis:
     image: redis:7-alpine
